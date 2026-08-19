@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "category": "coding",
+        "question": "Write a C++ program to find the second largest element in an array. Explain the logic and give time and space complexity."
+    },
+    {
+        "id": 2,
+        "category": "coding",
+        "question": "Write a C++ program to implement binary search and explain why its time complexity is O(log n)."
+    },
+    {
+        "id": 3,
+        "category": "debugging",
+        "question": "Find and explain the errors in this C++ code: int a=10; int b=0; cout << a/b;"
+    },
+    {
+        "id": 4,
+        "category": "debugging",
+        "question": "Debug this C++ code for finding the maximum element: for(int i=0;i<n;i++){ if(arr[i]>max) max=arr[i]; } Explain what could be wrong and provide a corrected version."
+    },
+    {
+        "id": 5,
+        "category": "reasoning",
+        "question": "Explain the difference between a stack and a queue using a real-world example and compare their basic operations."
+    },
+    {
+        "id": 6,
+        "category": "reasoning",
+        "question": "Explain why merge sort has O(n log n) time complexity."
+    },
+    {
+        "id": 7,
+        "category": "reasoning",
+        "question": "Compare BFS and DFS and explain when each algorithm should be preferred."
+    },
+    {
+        "id": 8,
+        "category": "technical",
+        "question": "Explain what a process and a thread are and compare their memory usage and execution."
+    },
+    {
+        "id": 9,
+        "category": "technical",
+        "question": "Explain normalization in DBMS and describe 1NF, 2NF and 3NF with examples."
+    },
+    {
+        "id": 10,
+        "category": "technical",
+        "question": "Explain TCP three-way handshake and why it is required."
+    }
+]

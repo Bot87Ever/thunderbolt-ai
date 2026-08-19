@@ -1,0 +1,11 @@
+timestamp,model,question_id,category,question,quality_score,matched_concepts,total_concepts,response_time,tokens_per_second,gpu_peak,vram_peak_gb
+2026-08-16T18:27:18.893928,qwen3:8b,1,coding,Write a C++ program to find the second largest element in an array. Explain the logic and give time and space complexity.,10.0,4,4,427.9276,10.31,52.0,4.42
+2026-08-16T18:30:24.597229,qwen3:8b,2,coding,Write a C++ program to implement binary search and explain why its time complexity is O(log n).,10.0,4,4,185.5991,12.53,57.0,4.36
+2026-08-16T18:31:42.925172,qwen3:8b,3,debugging,Find and explain the errors in this C++ code: int a=10; int b=0; cout << a/b;,10.0,3,3,78.1888,13.98,87.0,4.33
+2026-08-16T18:33:31.149118,qwen3:8b,4,debugging,Debug this C++ code for finding the maximum element: for(int i=0;i<n;i++){ if(arr[i]>max) max=arr[i]; } Explain what could be wrong and provide a corrected version.,10.0,4,4,108.1852,13.06,49.0,4.42
+2026-08-16T18:35:01.080925,qwen3:8b,5,reasoning,Explain the difference between a stack and a queue using a real-world example and compare their basic operations.,10.0,4,4,89.922,12.89,55.0,4.32
+2026-08-16T18:38:18.391846,qwen3:8b,6,reasoning,Explain why merge sort has O(n log n) time complexity.,10.0,4,4,197.2385,12.27,54.0,4.35
+2026-08-16T18:41:02.369591,qwen3:8b,7,reasoning,Compare BFS and DFS and explain when each algorithm should be preferred.,10.0,4,4,163.8138,12.15,55.0,4.35
+2026-08-16T18:43:20.858254,qwen3:8b,8,technical,Explain what a process and a thread are and compare their memory usage and execution.,10.0,4,4,138.3748,12.55,54.0,4.35
+2026-08-16T18:47:11.561603,qwen3:8b,9,technical,"Explain normalization in DBMS and describe 1NF, 2NF and 3NF with examples.",10.0,4,4,230.6487,12.03,67.0,4.35
+2026-08-16T18:48:50.804236,qwen3:8b,10,technical,Explain TCP three-way handshake and why it is required.,10.0,4,4,99.0777,14.23,56.0,4.35

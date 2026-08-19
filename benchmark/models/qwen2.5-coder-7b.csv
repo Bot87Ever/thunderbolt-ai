@@ -1,0 +1,390 @@
+timestamp,model,question_id,category,question,answer,response_time,generated_tokens,tokens_per_second,cpu_average,cpu_peak,ram_average_gb,ram_peak_gb,gpu_average,gpu_peak,vram_average_gb,vram_peak_gb,vram_total_gb
+2026-08-19T09:35:31.785119,qwen2.5-coder:7b,1,coding,Write a C++ program to find the second largest element in an array. Explain the logic and give time and space complexity.,"```cpp
+#include <iostream>
+using namespace std;
+
+int secondLargest(int arr[], int n) {
+    if (n < 2) {
+        // Not enough elements for a second largest.
+        return -1; 
+    }
+
+    // Initialize the first and second largest with INT_MIN
+    int first = second = INT_MIN;
+    
+    for (int i=0; i<n; i++) {
+        // Update if current element is greater than 'first'
+        if (arr[i] > first) {
+            second = first;
+            first = arr[i];
+        } 
+        // Update if current element is between 'first' and 'second'
+        else if (arr[i] > second && arr[i] != first) {
+            second = arr[i];
+        }
+    }
+
+    return (second == INT_MIN) ? -1 : second;
+}
+
+int main() {
+    int arr[] = {12, 34, 56, 78, 90};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    
+    cout << ""The second largest element is: "" << secondLargest(arr, n) << endl;
+    
+    return 0;
+}
+```
+
+**Logic Explanation**: 
+
+1. The function `secondLargest` takes an array of integers and its size as input.
+2. It initializes two variables `first` and `second` to store the largest and second largest numbers respectively. Initially, both are set to `INT_MIN`.
+3. We then loop through each element in the array:
+   - If the current element is greater than `first`, it becomes the new `first`, and the old `first` becomes the new `second`.
+   - If the current element is not equal to `first` but greater than `second`, it simply updates `second`.
+4. After the loop, if `second` remains `INT_MIN`, it means there was no second largest number (either all elements were the same or less than two), so we return `-1`. Otherwise, we return `second`.
+
+**Time Complexity**: 
+The time complexity of this solution is O(n) as we are traversing through the array only once.
+
+**Space Complexity**: 
+The space complexity is O(1) because we are using a constant amount of extra space irrespective of the input size.",55.8494,481,17.8,66.71,98.1,15.05,15.57,27.98,61.0,2.81,4.28,6.0
+2026-08-19T09:35:57.124756,qwen2.5-coder:7b,2,coding,Write a C++ program to implement binary search and explain why its time complexity is O(log n).,"Sure, here's an example of a simple C++ program that implements Binary Search:
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+
+int binarySearch(int arr[], int l, int r, int x) {
+    while (l <= r) {
+        int m = l + (r-l)/2;
+        
+        if (arr[m] == x)
+            return m;
+        
+        // If x is greater, ignore left half
+        if (arr[m] < x)
+            l = m + 1;
+
+        // If x is smaller, ignore right half
+        else
+            r = m - 1;
+    }
+    
+    // If we reach here, then element was not present in array
+    return -1;
+}
+
+int main() {
+   int arr[] = {2,3,4,10,40};
+   int n = sizeof(arr)/sizeof(arr[0]);
+   int x = 10;
+   int result = binarySearch(arr, 0, n-1, x);
+   (result == -1)? cout<<""Element is not present in array""
+                 : cout<<""Element is present at index ""<<result;
+   return 0;
+}
+```
+
+Binary search works by repeatedly dividing the search interval in half. If the value of the search key is less than the item in the middle of the interval, narrow the interval to the lower half. Otherwise, narrow it to the upper half. Repeatedly check until the value is found or the interval is empty.
+
+The time complexity of binary search is O(log n) because each iteration halves the number of elements being searched. So if you start with N elements and keep dividing by 2, after k iterations (or searches), you'll be down to just one element or no elements left. Hence, log₂N iterations are needed in the worst case.
+
+This results in a logarithmic time complexity because the number of operations grows as the logarithm of the input size. This makes binary search very efficient for large data sets.",25.2538,417,17.43,86.65,100.0,15.2,15.39,47.84,63.0,4.28,4.29,6.0
+2026-08-19T09:36:10.145905,qwen2.5-coder:7b,3,debugging,Find and explain the errors in this C++ code: int a=10; int b=0; cout << a/b;,"The given C++ code has one main error:
+
+```cpp
+int a=10;
+int b=0;
+cout << a/b;
+```
+
+Error Explanation:
+- Division by zero is undefined in mathematics and can lead to unpredictable behavior or program crashes. In this case, the variable `b` is initialized to 0, which causes a division by zero error when you try to execute `a/b`.
+
+To fix this issue, you should ensure that `b` is not zero before performing the division:
+
+```cpp
+int a=10;
+int b=2; // Change value of b to avoid division by zero
+if (b != 0) {
+    cout << a / b;
+} else {
+    cout << ""Error: Division by zero"";
+}
+```
+
+In this corrected version, `b` is initialized to a non-zero value (2), and the program checks if `b` is not zero before performing the division. If `b` were still zero, it would print an error message instead of attempting the division.",12.8153,214,18.1,84.56,100.0,15.16,15.17,45.69,62.0,4.28,4.28,6.0
+2026-08-19T09:36:29.990818,qwen2.5-coder:7b,4,debugging,Debug this C++ code for finding the maximum element: for(int i=0;i<n;i++){ if(arr[i]>max) max=arr[i]; } Explain what could be wrong and provide a corrected version.,"The provided code has a logical error in that it does not initialize the variable `max` before using it to compare with elements of the array `arr`. If you don't initialize `max`, its value is undefined, and this can lead to incorrect results or even crashes.
+
+Here's how you could fix the code:
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int findMax(int arr[], int n) {
+    if (n <= 0) {
+        cout << ""Array is empty."" << endl;
+        return -1; // or some error value
+    }
+
+    int max = arr[0]; // Initialize max with the first element of the array
+
+    for(int i=1; i<n; i++) { // Start loop from 1 since we already initialized with first element
+        if(arr[i] > max) {
+            max = arr[i];
+        }
+    }
+
+    return max;
+}
+
+int main() {
+    int arr[] = {3, 5, 2, 8, 1};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    cout << ""Maximum element is: "" << findMax(arr, n) << endl;
+    return 0;
+}
+```
+
+In the corrected code:
+
+- I added a check to ensure `n` (the size of the array) is greater than 0.
+- Initialized `max` with the first element of the array (`arr[0]`). This way, you are guaranteed to have at least one comparison and avoid undefined behavior.
+
+This modified version should correctly find and return the maximum element in an integer array.",19.7052,331,17.61,89.04,100.0,15.19,15.21,50.46,65.0,4.28,4.28,6.0
+2026-08-19T09:37:01.117159,qwen2.5-coder:7b,5,reasoning,Explain the difference between a stack and a queue using a real-world example and compare their basic operations.,"A stack and a queue are both data structures used to store collections of elements, but they operate differently based on how elements are added and removed. Let's use a real-world scenario to illustrate the differences and then compare their basic operations.
+
+### Real-World Example
+
+**Stack:** Imagine you have a stack of plates. When you want to put a new plate on top, you simply place it on the topmost plate. If you need to take a plate off, you remove the top one. This follows the Last In First Out (LIFO) principle.
+
+**Queue:** Now, think about a line at a grocery store checkout counter. People join the line from the back and leave from the front. This is an example of a First In First Out (FIFO) principle, similar to how a queue works.
+
+### Basic Operations
+
+#### Stack
+
+1. **Push**: Adds an item to the top of the stack.
+2. **Pop**: Removes the item from the top of the stack.
+3. **Peek**: Returns the item at the top of the stack without removing it.
+4. **IsEmpty**: Checks if the stack is empty.
+
+#### Queue
+
+1. **Enqueue**: Adds an item to the end (rear) of the queue.
+2. **Dequeue**: Removes the item from the front of the queue.
+3. **Front**: Returns the item at the front of the queue without removing it.
+4. **IsEmpty**: Checks if the queue is empty.
+
+### Comparison
+
+1. **Ordering Principle**:
+   - Stack operates on the Last In First Out (LIFO) principle, meaning the last element added is the first to be removed.
+   - Queue operates on the First In First Out (FIFO) principle, meaning the first element added is the first to be removed.
+
+2. **Operations**:
+   - A stack focuses more on the topmost element with operations like push and pop.
+   - A queue focuses more on the frontmost element with operations like enqueue and dequeue.
+
+3. **Use Cases**:
+   - Stacks are commonly used in scenarios that require undo functionality, function call management in programming languages, and many other applications where items need to be processed in reverse order of their arrival.
+   - Queues are essential for scenarios involving waiting lines, job scheduling, breadth-first search algorithms, and any situation where processing is sequential and the first item added must be the first to be processed.
+
+Understanding these differences helps in choosing the right data structure based on the requirements of a specific problem.",31.0084,515,17.3,90.36,100.0,15.34,15.4,48.14,62.0,4.28,4.28,6.0
+2026-08-19T09:37:23.938558,qwen2.5-coder:7b,6,reasoning,Explain why merge sort has O(n log n) time complexity.,"Merge sort is an efficient, stable sorting algorithm that operates on the principle of divide and conquer. Here’s why its time complexity is O(n log n):
+
+1. **Divide Phase**: The array (or list) is split into halves until each sub-array contains only one element. This process continues recursively, reducing the size of the problem by half at each step.
+   
+   - If the array has \( n \) elements, it takes \( \log_2(n) \) splits to reduce it down to individual elements.
+
+2. **Conquer Phase**: Once we have arrays with a single element (which are inherently sorted), these sub-arrays start merging back together in a way that ensures they are sorted as they combine.
+   
+   - Each merge operation takes linear time, \( O(n) \), where \( n \) is the total number of elements being merged at any given step.
+
+3. **Combine Phase**: During each level of recursion, the merges happen, and this happens logarithmically many times (since we keep dividing the array until it's split into single elements). Each merge combines the sub-arrays in a way that ensures they are sorted.
+   
+   - At each level, the number of comparisons and swaps grows linearly with the total number of elements being merged. Since there are \( \log_2(n) \) levels (one for each bit position), the total time spent merging at all levels is:
+     \[
+     O(n \times \log_2(n))
+     \]
+
+To summarize, Merge sort has a time complexity of \( O(n \log n) \) because it divides the array into halves (\( \log_2(n) \) times), and each merge operation at any level takes linear time. The logarithmic divisions ensure that this process isn't dominated by the linear merging steps, resulting in an overall efficiency of \( O(n \log n) \).",22.7307,391,18.06,79.25,97.4,15.36,15.4,49.12,61.0,4.28,4.28,6.0
+2026-08-19T09:37:59.158715,qwen2.5-coder:7b,7,reasoning,Compare BFS and DFS and explain when each algorithm should be preferred.,"Breadth-First Search (BFS) and Depth-First Search (DFS) are two fundamental algorithms used for traversing or searching tree or graph data structures. Here's how they differ and when to prefer one over the other:
+
+### Breadth-First Search (BFS):
+
+1. **Traversal Order**: BFS starts at the root node and explores all nodes at the present depth level before moving on to nodes at the next depth level.
+2. **Data Structure**: It uses a Queue data structure to manage the nodes to explore, ensuring that nodes are explored in a FIFO (First In First Out) order.
+3. **Memory Usage**: BFS can be memory-intensive as it might need to store all nodes of one level before moving to the next. This is particularly true for very large graphs.
+4. **Applications**: It's often used for finding the shortest path between two vertices in an unweighted graph, solving puzzles like mazes or Rubik’s cube, and in network routing protocols.
+
+### Depth-First Search (DFS):
+
+1. **Traversal Order**: DFS starts at the root node and explores as far down a branch as possible before backtracking.
+2. **Data Structure**: It uses a Stack data structure for managing nodes to explore, typically implemented using recursion or an actual stack data structure.
+3. **Memory Usage**: DFS is generally more memory-efficient than BFS because it only needs to store the current path from the root node. However, this can lead to high memory usage in deep graphs with many branches.
+4. **Applications**: DFS is used for graph traversal and cycle detection, topological sorting of directed acyclic graphs (DAGs), and solving puzzles like the N-Queens problem.
+
+### When to Prefer Each Algorithm:
+
+1. **BFS**:
+   - When you need to find the shortest path in an unweighted graph.
+   - For problems where you want to explore all possible paths before making a decision.
+   - When the goal is to minimize the number of steps or iterations required.
+   - In situations where memory is not a significant constraint.
+
+2. **DFS**:
+   - When searching for a specific node in an unweighted graph.
+   - For topological sorting and acyclic graph analysis.
+   - To determine if there's a path between two nodes (existence check).
+   - Situations where the depth of the solution is relatively small or when backtracking is more efficient.
+
+### Summary:
+- **BFS** is preferable for problems that require exploring all possible paths level by level, such as finding the shortest path in an unweighted graph.
+- **DFS** is better suited for problems where you can terminate early once a goal is reached or when you need to explore deep structures without high memory constraints.
+
+Both algorithms have their strengths and are chosen based on the specific requirements of the problem at hand.",34.9611,577,17.12,86.56,100.0,15.4,15.45,48.57,71.0,4.29,4.3,6.0
+2026-08-19T09:38:15.385583,qwen2.5-coder:7b,8,technical,Explain what a process and a thread are and compare their memory usage and execution.,"A process is an instance of a program in execution that has its own address space and resources such as memory, CPU time, and I/O devices. Each process is isolated from others, meaning they cannot directly access each other's data or resources. 
+
+On the other hand, a thread is a unit of execution within a process. It shares the same address space and resources with other threads in the same process. Threads are lighter weight than processes, which means that creating and destroying them requires less system resources.
+
+Memory usage:
+- Process: Each process has its own memory space, so it uses more memory.
+- Thread: Threads share the same memory space of a process, so they use less memory compared to processes.
+
+Execution:
+- Process: Processes run independently. When one process is stopped or terminated, others continue running.
+- Thread: Threads within a process can communicate and coordinate with each other. If a thread is blocked or waiting for I/O operation to complete, the rest of the threads in the same process can still execute.
+
+In summary, processes are more isolated and use more memory but provide better security. Threads are lightweight and allow multiple parts of a program to run concurrently, making them suitable for multitasking applications. The choice between using a process or a thread depends on the requirements of the application.",15.991,262,17.77,87.21,100.0,15.05,15.46,46.85,61.0,4.3,4.3,6.0
+2026-08-19T09:39:05.830478,qwen2.5-coder:7b,9,technical,"Explain normalization in DBMS and describe 1NF, 2NF and 3NF with examples.","Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity. It involves decomposing tables into smaller units called relations that are logically dependent on each other.
+
+### Normalization Levels (1NF, 2NF, 3NF):
+
+#### 1NF (First Normal Form):
+- **Definition**: A table is said to be in 1NF if it satisfies the following properties:
+  - Atomicity: Each element in the table is indivisible. Every column should contain atomic values.
+  - Uniqueness: Each row in the table must be unique.
+  - Non-repeating Groups (Flat Structure): There should not be any repeating groups within a row.
+
+**Example**:
+Consider a `Student_Records` table:
+
+| StudentID | Name        | Course       |
+|-----------|-------------|--------------|
+| 1         | John Doe    | Math, Physics|
+| 2         | Jane Smith  | Biology      |
+
+This table is not in 1NF because the ""Course"" column contains repeating groups. It should be split into two tables:
+
+- `Students`:
+  - StudentID
+  - Name
+
+- `Courses`:
+  - CourseID
+  - CourseName
+
+**Normalized Form (1NF)**:
+
+| StudentID | Name        |
+|-----------|-------------|
+| 1         | John Doe    |
+| 2         | Jane Smith  |
+
+| CourseID  | CourseName   |
+|-----------|--------------|
+| Math      | Physics      |
+| Biology   |              |
+
+#### 2NF (Second Normal Form):
+- **Definition**: A table is said to be in 2NF if it satisfies the properties of 1NF and also:
+  - The table must be non-trivial.
+  - All non-prime attributes are fully functionally dependent on the primary key.
+
+**Example**:
+Consider a `Students_Courses` table:
+
+| StudentID | CourseID |
+|-----------|----------|
+| 1         | Math     |
+| 1         | Physics  |
+| 2         | Biology  |
+
+This table is in 1NF but not in 2NF because the non-prime attribute ""CourseID"" does not fully depend on the primary key ""StudentID"". It depends only partially, as both ""Math"" and ""Physics"" are associated with StudentID 1.
+
+**Normalized Form (2NF)**:
+
+| StudentID | CourseID |
+|-----------|----------|
+| 1         | Math     |
+| 1         | Physics  |
+| 2         | Biology  |
+
+This table is already in 2NF as the non-prime attribute ""CourseID"" depends on the primary key.
+
+#### 3NF (Third Normal Form):
+- **Definition**: A table is said to be in 3NF if it satisfies the properties of 1NF and 2NF, and also:
+  - All non-prime attributes are not transitively dependent on the primary key.
+  - The table must have a lossless join property.
+
+**Example**:
+Consider an `Enrollment` table:
+
+| StudentID | CourseID | Professor |
+|-----------|----------|-----------|
+| 1         | Math     | Smith     |
+| 2         | Physics  | Johnson   |
+
+This table is in 2NF but not in 3NF because ""Professor"" depends transitively on the primary key ""StudentID"". If we change a student's course, their professor may also change.
+
+**Normalized Form (3NF)**:
+
+| StudentID | CourseID |
+|-----------|----------|
+| 1         | Math     |
+| 2         | Physics  |
+
+| CourseID  | Professor |
+|-----------|-----------|
+| Math      | Smith     |
+| Physics   | Johnson   |
+
+This table is now in 3NF as the non-prime attribute ""Professor"" does not depend transitively on the primary key.
+
+Normalization helps to reduce data redundancy and improve database performance by ensuring that each piece of data is stored only once. It also enhances data integrity, making it easier to manage and maintain a robust database system.",50.4027,841,17.09,87.33,100.0,14.4,14.68,49.7,62.0,4.3,4.31,6.0
+2026-08-19T09:39:35.634237,qwen2.5-coder:7b,10,technical,Explain TCP three-way handshake and why it is required.,"The TCP three-way handshake is a protocol used to establish a connection between two computers over the internet or any network that uses the TCP/IP protocol suite. It is essential for ensuring that both ends of the communication agree to communicate before data can be exchanged.
+
+### The Three-Stage Process:
+
+1. **SYN (Synchronize) Packet**:
+   - The client sends a SYN packet to the server indicating its desire to establish a connection.
+   - This packet includes a sequence number, which is used later to identify and track the packets in the communication session.
+
+2. **SYN-ACK (Synchronize-Acknowledge) Packet**:
+   - Upon receiving the SYN packet from the client, the server responds with a SYN-ACK packet.
+   - The server's SYN-ACK includes its own sequence number and an acknowledgment number that is one more than the client's initial sequence number. This indicates to the client that the server has received the connection request.
+
+3. **ACK (Acknowledge) Packet**:
+   - After receiving the SYN-ACK, the client sends an ACK packet back to the server.
+   - The ACK contains its own acknowledgment number, which is one more than the server's initial sequence number, indicating to the server that it has received the server's response.
+
+### Why the Three-Way Handshake is Required:
+
+1. **Establishing a Connection**:
+   - The three-way handshake ensures that both ends of the connection are ready to communicate. Without this handshake, there would be no way for one end to know if the other end is actually prepared to receive or send data.
+
+2. **Preventing Errors and Attacks**:
+   - This process helps prevent certain types of attacks and errors. For example, it prevents a server from inadvertently accepting connections from unauthorized devices that might be trying to use its resources maliciously.
+   
+3. **Sequence Numbering**:
+   - The sequence numbers used in the handshake help ensure that packets are delivered in the correct order and that no packet is duplicated or lost.
+
+4. **Reliability of Data Transfer**:
+   - TCP relies on the three-way handshake for reliability, as it establishes a session where data can be sent with guaranteed delivery and without interference from other connections.
+
+In summary, the TCP three-way handshake is a crucial mechanism for establishing a reliable connection between two hosts using the TCP/IP protocol. It ensures that both parties are ready to communicate and helps prevent various types of network errors and attacks.",29.6994,498,17.53,88.74,99.2,14.13,14.28,47.38,61.0,4.29,4.29,6.0

@@ -1,0 +1,11 @@
+timestamp,model,question_id,category,question,quality_score,matched_concepts,total_concepts,response_time,tokens_per_second,gpu_peak,vram_peak_gb
+2026-08-19T18:04:58.906285,gemma3:4b,1,coding,Write a C++ program to find the second largest element in an array. Explain the logic and give time and space complexity.,10.0,4,4,42.5491,53.64,90.0,3.9
+2026-08-19T18:05:22.999378,gemma3:4b,2,coding,Write a C++ program to implement binary search and explain why its time complexity is O(log n).,10.0,4,4,24.0298,54.86,88.0,3.9
+2026-08-19T18:05:40.872107,gemma3:4b,3,debugging,Find and explain the errors in this C++ code: int a=10; int b=0; cout << a/b;,10.0,3,3,17.8069,55.21,100.0,3.9
+2026-08-19T18:06:07.356723,gemma3:4b,4,debugging,Debug this C++ code for finding the maximum element: for(int i=0;i<n;i++){ if(arr[i]>max) max=arr[i]; } Explain what could be wrong and provide a corrected version.,10.0,4,4,26.2852,53.98,100.0,3.9
+2026-08-19T18:06:23.578856,gemma3:4b,5,reasoning,Explain the difference between a stack and a queue using a real-world example and compare their basic operations.,10.0,4,4,16.0696,55.13,88.0,3.85
+2026-08-19T18:06:44.916276,gemma3:4b,6,reasoning,Explain why merge sort has O(n log n) time complexity.,10.0,4,4,21.2392,54.74,89.0,3.88
+2026-08-19T18:07:03.174926,gemma3:4b,7,reasoning,Compare BFS and DFS and explain when each algorithm should be preferred.,10.0,4,4,18.1602,54.91,98.0,3.88
+2026-08-19T18:07:25.275998,gemma3:4b,8,technical,Explain what a process and a thread are and compare their memory usage and execution.,10.0,4,4,21.8533,54.85,88.0,3.88
+2026-08-19T18:07:57.883273,gemma3:4b,9,technical,"Explain normalization in DBMS and describe 1NF, 2NF and 3NF with examples.",10.0,4,4,32.3469,54.15,92.0,3.88
+2026-08-19T18:08:16.891887,gemma3:4b,10,technical,Explain TCP three-way handshake and why it is required.,10.0,4,4,18.9703,55.51,90.0,3.87
