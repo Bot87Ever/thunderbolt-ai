@@ -1,0 +1,15 @@
+timestamp,model,question,response_time,generated_tokens,tokens_per_second,cpu_average,cpu_peak,ram_average_gb,ram_peak_gb,gpu_average,gpu_peak,vram_average_gb,vram_peak_gb,vram_total_gb
+2026-08-16T14:11:30.992337,qwen2.5-coder:7b,,16.5885,10,21.75,42.49,85.0,14.62,15.2,7.4,100.0,1.77,4.14,6.0
+2026-08-16T14:11:34.108874,qwen2.5-coder:7b,';lkjhghjkl;;',2.9522,39,21.61,68.47,100.0,15.03,15.06,31.0,55.0,4.14,4.14,6.0
+2026-08-19T19:53:05.204121,gemma3:4b,Which model was the overall benchmark winner?,15.6378,181,53.0,38.87,69.1,15.21,15.36,21.79,97.0,4.22,4.23,6.0
+2026-08-19T19:53:45.643667,gemma3:4b,What was the benchmark score of Llama 3 70B?,13.1317,566,55.5,36.65,55.4,14.81,14.86,68.65,100.0,4.15,4.19,6.0
+2026-08-19T19:55:15.501724,gemma3:4b,What was the benchmark score of Llama 3 70B?,4.0128,11,48.75,40.57,79.7,14.86,15.1,15.82,87.0,4.13,4.15,6.0
+2026-08-19T20:03:43.675985,gemma3:4b,Which model was the overall benchmark winner?,18.8731,8,50.04,44.38,80.6,14.92,15.44,8.54,100.0,1.59,4.09,6.0
+2026-08-19T20:04:12.755126,gemma3:4b,What was the average quality score of Qwen2.5-Coder 7B?,4.3699,25,46.58,45.27,86.5,14.89,15.17,21.68,100.0,4.1,4.15,6.0
+2026-08-19T20:45:02.125061,gemma3:4b,what was the overall benchmark winner,20.294,124,55.62,40.94,71.1,14.88,15.4,14.17,87.0,1.88,4.11,6.0
+2026-08-20T01:48:01.626581,gemma3:4b,hello Thunderbolt how are you,13.8149,72,14.51,31.98,60.0,14.76,15.07,37.13,98.0,2.88,4.09,6.0
+2026-08-20T01:48:51.319541,gemma3:4b,hello my name is,3.2194,44,46.48,45.63,63.9,14.59,14.65,30.13,82.0,4.05,4.08,6.0
+2026-08-20T01:49:32.099619,gemma3:4b,hi I am,3.9947,74,39.62,42.01,61.9,14.83,14.84,43.78,100.0,4.02,4.02,6.0
+2026-08-20T01:56:26.324452,gemma3:4b,dfs give me their time,21.4126,96,43.34,43.43,72.4,14.63,15.09,11.34,83.0,2.1,4.04,6.0
+2026-08-20T02:02:32.605921,gemma3:4b,one warning do not make past threshold huge like 5 to 10 seconds otherwise the Thunderbolt will feel like its hanging while waiting for you to,30.7165,478,39.04,45.4,80.9,14.67,14.92,36.65,99.0,2.83,4.07,6.0
+2026-08-20T02:36:16.236881,gemma3:4b,quit,19.0278,30,59.07,23.91,100.0,13.27,13.52,6.68,77.0,2.78,3.94,6.0
