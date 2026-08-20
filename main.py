@@ -198,7 +198,8 @@ recognizer = sr.Recognizer()
 
 recognizer.pause_threshold = 2.0
 recognizer.non_speaking_duration = 0.8
-recognizer.phrase_threshold=0.3
+recognizer.phrase_threshold = 0.3
+
 speaker = pyttsx3.init()
 
 
@@ -223,7 +224,6 @@ def listen():
             )
 
         try:
-
 
             text = recognizer.recognize_google(
                 audio
@@ -344,6 +344,7 @@ print()
 print("=" * 60)
 print("                 THUNDERBOLT.AI")
 print("=" * 60)
+
 print(f"Model: {MODEL}")
 
 if document_chunks:
@@ -526,22 +527,42 @@ ANSWER:
 
 
     # --------------------------------------------------------
-    # OLLAMA
+    # OLLAMA - STREAMING
     # --------------------------------------------------------
 
-    response = None
+    answer = ""
+
+    stream_start_time = time.perf_counter()
 
     try:
 
-        response = ollama.chat(
+        print()
+        print("Thunderbolt.ai:")
+
+        stream = ollama.chat(
             model=MODEL,
             messages=[
                 {
                     "role": "user",
                     "content": prompt
                 }
-            ]
+            ],
+            stream=True
         )
+
+        for chunk in stream:
+
+            content = chunk["message"]["content"]
+
+            answer += content
+
+            print(
+                content,
+                end="",
+                flush=True
+            )
+
+        print()
 
     except Exception as e:
 
@@ -550,6 +571,10 @@ ANSWER:
             f"Thunderbolt.ai error: {e}"
         )
         print()
+
+        stop_event.set()
+
+        monitor_thread.join()
 
         continue
 
@@ -566,29 +591,20 @@ ANSWER:
     # RESPONSE METRICS
     # --------------------------------------------------------
 
-    answer = response["message"]["content"]
-
     total_time = (
         end_time -
         start_time
     )
 
-    tokens = response.get(
-        "eval_count",
-        0
-    )
+    # Approximate generated token count
+    # using whitespace-separated words.
+    tokens = len(answer.split())
 
-    eval_duration = response.get(
-        "eval_duration",
-        0
-    )
-
-
-    if eval_duration > 0:
+    if total_time > 0:
 
         tokens_per_second = (
             tokens /
-            (eval_duration / 1_000_000_000)
+            total_time
         )
 
     else:
@@ -698,14 +714,11 @@ ANSWER:
 
 
     # --------------------------------------------------------
-    # OUTPUT
+    # PERFORMANCE OUTPUT
     # --------------------------------------------------------
 
     print()
-    print("Thunderbolt.ai:")
-    print(answer)
 
-    print()
     print(
         "──────── PERFORMANCE ────────"
     )
@@ -805,7 +818,10 @@ ANSWER:
             datetime.now().isoformat(),
             MODEL,
             question,
-            round(total_time, 4),
+            round(
+                total_time,
+                4
+            ),
             tokens,
             round(
                 tokens_per_second,
