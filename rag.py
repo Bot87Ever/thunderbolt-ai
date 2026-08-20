@@ -1,140 +1,165 @@
 import os
-import faiss
+import numpy as np
 import ollama
-from pypdf import PdfReader
+
 from sentence_transformers import SentenceTransformer
+from pypdf import PdfReader
 
-
-MODEL = "gemma3:4b"
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 DOCUMENT_FOLDER = "documents"
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 100
-TOP_K = 4
+
+EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+
+MODEL = "gemma3:4b"
 
 
 print("Loading embedding model...")
-embedder = SentenceTransformer(EMBEDDING_MODEL)
 
-
-def read_pdf(path):
-    reader = PdfReader(path)
-
-    text = ""
-
-    for page in reader.pages:
-        page_text = page.extract_text()
-
-        if page_text:
-            text += page_text + "\n"
-
-    return text
-
-
-def split_text(text):
-    chunks = []
-
-    start = 0
-
-    while start < len(text):
-
-        end = start + CHUNK_SIZE
-
-        chunk = text[start:end].strip()
-
-        if chunk:
-            chunks.append(chunk)
-
-        start += CHUNK_SIZE - CHUNK_OVERLAP
-
-    return chunks
+embedding_model = SentenceTransformer(
+    EMBEDDING_MODEL
+)
 
 
 def load_documents():
 
-    all_chunks = []
+    chunks = []
+
+    if not os.path.exists(DOCUMENT_FOLDER):
+        os.makedirs(DOCUMENT_FOLDER)
+
+        return chunks
 
     for filename in os.listdir(DOCUMENT_FOLDER):
+
+        if not filename.lower().endswith(".pdf"):
+            continue
 
         path = os.path.join(
             DOCUMENT_FOLDER,
             filename
         )
 
-        if filename.lower().endswith(".pdf"):
+        print(
+            f"Reading document: {filename}"
+        )
 
-            print(f"Reading: {filename}")
+        try:
 
-            text = read_pdf(path)
+            reader = PdfReader(path)
 
-            chunks = split_text(text)
+            text = ""
 
-            all_chunks.extend(chunks)
+            for page in reader.pages:
 
-    return all_chunks
+                page_text = page.extract_text()
+
+                if page_text:
+                    text += page_text + "\n"
+
+            words = text.split()
+
+            chunk_size = 250
+
+            for i in range(
+                0,
+                len(words),
+                chunk_size
+            ):
+
+                chunk = " ".join(
+                    words[
+                        i:i + chunk_size
+                    ]
+                )
+
+                if chunk.strip():
+
+                    chunks.append(chunk)
+
+        except Exception as e:
+
+            print(
+                f"Error reading {filename}: {e}"
+            )
+
+    return chunks
 
 
 def create_index(chunks):
 
-    embeddings = embedder.encode(
+    if not chunks:
+        return None
+
+    embeddings = embedding_model.encode(
         chunks,
         convert_to_numpy=True
     )
 
-    dimension = embeddings.shape[1]
-
-    index = faiss.IndexFlatL2(dimension)
-
-    index.add(embeddings)
-
-    return index
+    return embeddings
 
 
-def retrieve(question, chunks, index):
+def retrieve(
+    query,
+    chunks,
+    index,
+    top_k=3
+):
 
-    question_embedding = embedder.encode(
-        [question],
+    if not chunks or index is None:
+        return []
+
+    query_embedding = embedding_model.encode(
+        [query],
         convert_to_numpy=True
+    )[0]
+
+    query_norm = np.linalg.norm(
+        query_embedding
     )
 
-    distances, indices = index.search(
-        question_embedding,
-        min(TOP_K, len(chunks))
+    index_norms = np.linalg.norm(
+        index,
+        axis=1
     )
 
-    results = []
+    similarities = np.dot(
+        index,
+        query_embedding
+    ) / (
+        index_norms * query_norm + 1e-10
+    )
 
-    for i in indices[0]:
+    top_indices = np.argsort(
+        similarities
+    )[::-1][:top_k]
 
-        if i < len(chunks):
+    return [
+        chunks[i]
+        for i in top_indices
+    ]
 
-            results.append(chunks[i])
 
-    return results
-
-
-def ask_model(question, context):
+def ask_model(
+    question,
+    context
+):
 
     prompt = f"""
-You are Thunderbolt.ai.
+You are a helpful AI assistant.
 
 Answer the user's question using the provided document context.
 
-If the answer is not present in the context, clearly say:
-"I could not find that information in the document."
+If the answer cannot be found in the context,
+say that you could not find the information
+in the document.
 
-Do not invent information.
-
-DOCUMENT CONTEXT:
+Document context:
 
 {context}
 
-USER QUESTION:
+User question:
 
 {question}
-
-ANSWER:
 """
 
     response = ollama.chat(
@@ -150,63 +175,15 @@ ANSWER:
     return response["message"]["content"]
 
 
-# --------------------------------------------------
-# START
-# --------------------------------------------------
+def ask_document(question):
 
-if not os.path.exists(DOCUMENT_FOLDER):
+    chunks = load_documents()
 
-    os.makedirs(DOCUMENT_FOLDER)
+    if not chunks:
 
-    print()
-    print("Created documents folder.")
-    print("Put your PDF inside:")
-    print("documents/")
-    print()
-    exit()
+        return "No PDF documents found."
 
-
-print()
-print("=" * 60)
-print("              THUNDERBOLT.AI")
-print("                 DOCUMENT RAG")
-print("=" * 60)
-print()
-
-
-chunks = load_documents()
-
-
-if not chunks:
-
-    print("No PDF documents found.")
-    print()
-    print("Put a PDF inside:")
-    print("documents/")
-    print()
-
-    exit()
-
-
-print()
-print(f"Document chunks: {len(chunks)}")
-print("Creating vector index...")
-
-index = create_index(chunks)
-
-print("Index ready.")
-print()
-print("Ask questions about your document.")
-print("Type 'exit' to quit.")
-print()
-
-
-while True:
-
-    question = input("You: ")
-
-    if question.lower() == "exit":
-        break
+    index = create_index(chunks)
 
     relevant_chunks = retrieve(
         question,
@@ -214,16 +191,92 @@ while True:
         index
     )
 
+    if not relevant_chunks:
+
+        return "I could not find that information in the document."
+
     context = "\n\n---\n\n".join(
         relevant_chunks
     )
 
-    answer = ask_model(
+    return ask_model(
         question,
         context
     )
 
+
+if __name__ == "__main__":
+
     print()
-    print("Thunderbolt.ai:")
-    print(answer)
+    print("=" * 60)
+    print("              THUNDERBOLT.AI")
+    print("                 DOCUMENT RAG")
+    print("=" * 60)
     print()
+
+    chunks = load_documents()
+
+    if not chunks:
+
+        print("No PDF documents found.")
+        print()
+        print("Put a PDF inside:")
+        print("documents/")
+        print()
+
+    else:
+
+        print()
+        print(
+            f"Document chunks: {len(chunks)}"
+        )
+
+        print(
+            "Creating vector index..."
+        )
+
+        index = create_index(chunks)
+
+        print("Index ready.")
+        print()
+        print(
+            "Ask questions about your document."
+        )
+        print(
+            "Type 'exit' to quit."
+        )
+        print()
+
+        while True:
+
+            question = input(
+                "You: "
+            ).strip()
+
+            if question.lower() == "exit":
+                break
+
+            if not question:
+                continue
+
+            relevant_chunks = retrieve(
+                question,
+                chunks,
+                index
+            )
+
+            context = "\n\n---\n\n".join(
+                relevant_chunks
+            )
+
+            answer = ask_model(
+                question,
+                context
+            )
+
+            print()
+            print(
+                "Thunderbolt.ai:"
+            )
+            print(answer)
+            print()
