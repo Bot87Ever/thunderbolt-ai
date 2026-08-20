@@ -219,8 +219,8 @@ def listen():
 
             audio = recognizer.listen(
                 source,
-                timeout=5,
-                phrase_time_limit=30
+                timeout=10,
+                phrase_time_limit=60
             )
 
         try:
