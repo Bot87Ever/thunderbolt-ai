@@ -102,7 +102,6 @@ def speak(text):
     except Exception:
         pass
 
-
 def listen():
 
     with sr.Microphone() as source:
