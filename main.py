@@ -24,7 +24,7 @@ recognizer.pause_threshold = 2.5
 recognizer.non_speaking_duration = 1.0
 recognizer.phrase_threshold = 0.3
 
-speaker = pyttsx3.init()
+speaker = None
 
 
 def get_gpu_stats():
@@ -92,7 +92,10 @@ def monitor_hardware(stop_event, stats):
 
 
 def speak(text):
+    global speaker
     try:
+        if speaker is None:
+            speaker = pyttsx3.init()
         speaker.say(text)
         speaker.runAndWait()
 
