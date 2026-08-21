@@ -1,12 +1,13 @@
-import json
 import csv
-import time
+import json
 import os
 import subprocess
-import psutil
 import threading
+import time
 from datetime import datetime
+
 import ollama
+import psutil
 
 MODEL = "gemma3:4b"
 

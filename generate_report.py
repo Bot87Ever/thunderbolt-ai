@@ -1,5 +1,6 @@
 import csv
 import os
+
 import matplotlib.pyplot as plt
 
 MODELS_FOLDER = "benchmark/models"

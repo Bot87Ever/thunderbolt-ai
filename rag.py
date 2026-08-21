@@ -1,10 +1,9 @@
 import os
+
 import numpy as np
 import ollama
-
-from sentence_transformers import SentenceTransformer
 from pypdf import PdfReader
-
+from sentence_transformers import SentenceTransformer
 
 DOCUMENT_FOLDER = "documents"
 

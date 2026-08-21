@@ -1,15 +1,14 @@
-import os
-import time
 import threading
+import time
 import warnings
 
 import ollama
 import psutil
-import speech_recognition as sr
 import pyttsx3
-from colorama import init, Fore
+import speech_recognition as sr
+from colorama import Fore, init
 
-from rag import load_documents, ask_document
+from rag import ask_document, load_documents
 
 warnings.filterwarnings("ignore")
 
